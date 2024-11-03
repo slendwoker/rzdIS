@@ -1,0 +1,169 @@
+-- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
+--
+-- Host: localhost    Database: db_yar_rzd
+-- ------------------------------------------------------
+-- Server version	8.0.34
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `cashier`
+--
+
+DROP TABLE IF EXISTS `cashier`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `cashier` (
+  `id_cashier` int NOT NULL,
+  `surname` varchar(45) NOT NULL,
+  `name` varchar(45) NOT NULL,
+  `num_trains` int NOT NULL,
+  PRIMARY KEY (`id_cashier`),
+  KEY `fk_cas_train_idx` (`num_trains`),
+  CONSTRAINT `fk_cas_train` FOREIGN KEY (`num_trains`) REFERENCES `train` (`num_train`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cashier`
+--
+
+LOCK TABLES `cashier` WRITE;
+/*!40000 ALTER TABLE `cashier` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cashier` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `new_routes`
+--
+
+DROP TABLE IF EXISTS `new_routes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `new_routes` (
+  `num_rout` int NOT NULL,
+  `from_where` varchar(45) NOT NULL,
+  `where_rout` varchar(45) NOT NULL,
+  `id_train` int NOT NULL,
+  `dep_time` datetime NOT NULL,
+  `arr_time` datetime NOT NULL,
+  `price` int NOT NULL,
+  PRIMARY KEY (`num_rout`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `new_routes`
+--
+
+LOCK TABLES `new_routes` WRITE;
+/*!40000 ALTER TABLE `new_routes` DISABLE KEYS */;
+INSERT INTO `new_routes` VALUES (1111,'Нижний Новгород','Глазов',1,'2000-01-01 00:00:00','2000-01-01 11:11:00',500),(1505,'Киров','Ленинское',6305,'2023-11-21 15:55:00','2023-11-21 19:12:00',442),(1564,'Киров','Зуевка',6374,'2023-11-23 15:10:00','2023-11-22 17:00:00',199),(1567,'Киров','Ежиха',6367,'2023-11-22 20:15:00','2023-11-22 22:55:00',373),(1574,'Киров','Глазов',6474,'2023-11-24 06:40:00','2023-11-24 08:45:00',301);
+/*!40000 ALTER TABLE `new_routes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `passengers`
+--
+
+DROP TABLE IF EXISTS `passengers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `passengers` (
+  `trip_id` int NOT NULL,
+  `passport` bigint NOT NULL,
+  `surname` varchar(45) NOT NULL,
+  `name` varchar(45) NOT NULL,
+  `num_routes` int NOT NULL,
+  PRIMARY KEY (`trip_id`),
+  KEY `fr_routes_idx` (`num_routes`),
+  CONSTRAINT `fr_routes` FOREIGN KEY (`num_routes`) REFERENCES `routes` (`num_rout`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `passengers`
+--
+
+LOCK TABLES `passengers` WRITE;
+/*!40000 ALTER TABLE `passengers` DISABLE KEYS */;
+INSERT INTO `passengers` VALUES (13,3319424233,'Яровиков','Илья',1234),(15,3319708913,'Яшкин','Игорь',1234),(17,3319424233,'Яровиков','Илья',1234),(19,3319608917,'Иванов','Иван',2233),(20,3319313123,'Николаев','Артем',909090),(98,3319608932,'Капранов','Никита',212145),(100,3319907817,'Ивонин','Артем',212145),(9090,3319432423,'Невский','Абраам',909090),(141212,1232131231,'Францесс','Кузьма',6393),(312312,8674544233,'Москиев','Артур',876876),(321312,3319424233,'Яровиков','Илья',67835),(321331,1794324232,'Донской','Дмитрий',553366),(868546,9009909090,'Афанасьев','Афанасий',2233),(876867,8992343242,'Петропавлов','Максим',553366),(986544,3319105608,'Тарасов','Никита',876876),(990665,3319231231,'Ленский','Илья',553366);
+/*!40000 ALTER TABLE `passengers` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `routes`
+--
+
+DROP TABLE IF EXISTS `routes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `routes` (
+  `num_rout` int NOT NULL,
+  `from_where` varchar(45) NOT NULL,
+  `where_rout` varchar(45) NOT NULL,
+  `id_train` int NOT NULL,
+  `dep_time` datetime NOT NULL,
+  `arr_time` datetime NOT NULL,
+  `price` int NOT NULL,
+  `is_hidden` tinyint NOT NULL,
+  PRIMARY KEY (`num_rout`),
+  KEY `fk_train _idx` (`id_train`),
+  CONSTRAINT `fk_train ` FOREIGN KEY (`id_train`) REFERENCES `train` (`num_train`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `routes`
+--
+
+LOCK TABLES `routes` WRITE;
+/*!40000 ALTER TABLE `routes` DISABLE KEYS */;
+INSERT INTO `routes` VALUES (1234,'Нижний Новгород','Киров',719,'2023-10-13 13:00:00','2023-10-14 08:00:00',1500,0),(1345,'Киров','Оричи',6068,'2023-11-11 15:10:00','2023-11-11 16:30:00',200,0),(2233,'Глазов','Киров',6305,'2023-12-15 15:10:00','2023-12-15 18:30:00',230,0),(6363,'Нижний Новгород','Шахунья',6363,'2023-12-15 12:45:00','2023-12-16 08:45:00',788,0),(6374,'Киров','Ленинское',6374,'2023-11-14 05:30:00','2023-11-14 08:45:00',373,0),(6393,'Ленинское','Киров',6393,'2023-12-31 18:02:00','2023-12-31 21:10:00',373,0),(54545,'Киров','Ленинское',6351,'2023-12-12 06:30:00','2023-12-12 08:30:00',373,0),(67835,'Шахунья','Фаленки',6376,'2023-12-15 12:10:00','2023-12-15 16:55:00',450,0),(89942,'Ленинское','Нижний Новгород',6382,'2022-12-31 17:55:00','2022-12-31 22:10:00',1000,0),(125678,'Нижний Новгород','Киров',6404,'2023-12-30 07:17:00','2023-12-31 13:50:00',1901,0),(212145,'Киров','Котельнич',6668,'2023-11-30 00:52:00','2023-11-30 02:04:00',911,0),(515151,'Зуевка','Фаленки',6395,'2022-08-24 16:30:00','2022-08-24 19:55:00',830,0),(553366,'Яр','Киров',6380,'2022-08-22 19:30:00','2022-08-22 22:30:00',550,0),(666777,'Киров','Яр',6378,'2022-12-15 07:30:00','2022-12-15 09:55:00',530,0),(876876,'Киров','Лянгасово',6531,'2023-12-25 12:25:00','2023-12-25 13:00:00',150,0),(896474,'Киров','Зуевка',6474,'2023-12-25 15:10:00','2023-12-25 17:25:00',240,0),(909090,'Нижний Новгород','Киров',6410,'2023-12-31 02:09:00','2023-12-31 06:48:00',1214,0),(999999,'Киров','Котельнич',6359,'2023-01-04 07:35:00','2023-01-04 08:45:00',255,0);
+/*!40000 ALTER TABLE `routes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `train`
+--
+
+DROP TABLE IF EXISTS `train`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `train` (
+  `num_train` int NOT NULL,
+  `type_train` varchar(45) NOT NULL,
+  `kol_train` int NOT NULL,
+  PRIMARY KEY (`num_train`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `train`
+--
+
+LOCK TABLES `train` WRITE;
+/*!40000 ALTER TABLE `train` DISABLE KEYS */;
+INSERT INTO `train` VALUES (719,'Скоростной поезд',5),(6068,'Скоростной поезд',3),(6305,'Электричка',3),(6351,'Скоростной поезд',6),(6359,'Электричка',6),(6363,'Электричка',3),(6374,'Электричка',5),(6376,'Электричка',3),(6378,'Электричка',5),(6380,'Скоростной поезд',6),(6382,'Электричка',4),(6393,'Электричка',4),(6395,'Скоростной поезд',5),(6397,'Скоростной поезд',6),(6404,'Скоростной поезд',4),(6410,'Скоростной поезд',5),(6474,'Скоростной поезд',6),(6531,'Электричка',4),(6668,'Электричка',5),(6859,'Скоростной поезд',5);
+/*!40000 ALTER TABLE `train` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2024-11-03 21:59:57
